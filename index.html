@@ -1648,3 +1648,13 @@ function renderCases(cat) {
 </script>
 </body>
 </html>
+      <div class="metrics-row">
+        ${cs.chips.map(m=>`<div class="m-chip"><div class="m-lbl">${m.l}</div><div class="m-val">${m.v}</div></div>`).join('')}
+      </div>
+    `;
+    c.appendChild(d);
+  });
+}
+</script>
+</body>
+</html>
