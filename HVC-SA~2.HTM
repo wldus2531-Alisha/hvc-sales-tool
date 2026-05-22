@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HV 상담 지원 TOOL v2 (탭 버전) | 배민 파트너</title>
+  <style>
+    :root {
+      --teal: #2AC1BC;
+      --teal-dark: #1A9E9A;
+      --teal-light: #E8F9F8;
+      --orange: #FF6B35;
+      --orange-light: #FFF0EB;
+      --purple: #6B35CC;
+      --purple-light: #F0EBFF;
+      --yellow-bg: #FFF8E1;
+      --yellow-text: #856404;
+      --red-bg: #B71C1C;
+      --gray-50: #F8F9FA;
+      --gray-100: #F1F3F5;
+      --gray-200: #E9ECEF;
+      --gray-300: #DEE2E6;
+      --gray-400: #CED4DA;
+      --gray-500: #ADB5BD;
+      --gray-600: #868E96;
+      --gray-700: #495057;
+      --gray-900: #212529;
+      --shadow-sm: 0 1px 6px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg: 0 8px 28px rgba(0,0,0,0.13);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── STICKY HEADER WRAPPER ── */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    /* ── TOP NOTICE BAR ── */
+    .top-notice {
+      background: var(--red-bg);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 20px;
+      text-align: center;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      letter-spacing: 0.1px;
+    }
+    .top-notice .tn-icon { font-size: 14px; flex-shrink: 0; }
+
+    /* ── HEADER BAR ── */
+    .header-bar {
+      background: var(--teal);
+      padding: 13px 20px 15px;
+      box-shadow: 0 3px 12px rgba(42,193,188,0.35);
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-area .logo { font-size: 17px; font-weight: 900; color: #fff; letter-spacing: -0.4px; line-height: 1.3; }
+    .logo-area .tagline { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+    .header-badge {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── CONTAINER ── */
+    .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
+
+    /* ── FILTER CARD ── */
+    .filter-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .step-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .step-badge {
+      background: var(--teal);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .step-title { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+
+    .region-row { display: flex; gap: 12px; }
+    @media (max-width: 520px) { .region-row { flex-direction: column; } }
+
+    .select-wrap { flex: 1; }
+    .select-label { font-size: 12px; font-weight: 600; color: var(--gray-600); display: block; margin-bottom: 6px; }
+    .select-outer { position: relative; }
+    select {
+      width: 100%;
+      padding: 12px 38px 12px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      font-size: 14px;
+      color: var(--gray-900);
+      appearance: none;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,193,188,0.15); }
+    select:disabled { background: var(--gray-100); color: var(--gray-500); cursor: not-allowed; }
+    .select-outer::after {
+      content: '▾';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--gray-500);
+      pointer-events: none;
+    }
+
+    .divider { height: 1px; background: var(--gray-100); margin: 20px 0; }
+
+    /* Category chips */
+    .category-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cat-chip {
+      padding: 7px 13px;
+      border-radius: 24px;
+      border: 1.5px solid var(--gray-200);
+      background: #fff;
+      font-size: 13px;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: all 0.18s;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .cat-chip:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
+    .cat-chip.selected { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 700; }
+
+    /* CTA Button */
+    .cta-btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      letter-spacing: -0.2px;
+    }
+    .cta-btn:hover:not(:disabled) { background: var(--teal-dark); box-shadow: 0 4px 14px rgba(42,193,188,0.4); }
+    .cta-btn:active:not(:disabled) { transform: scale(0.99); }
+    .cta-btn:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+
+    /* ── RESULTS ── */
+    .results { display: none; }
+    .results.visible { display: block; }
+
+    /* Selection pill bar */
+    .selection-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--teal-light);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(42,193,188,0.2);
+    }
+    .sel-icon { font-size: 16px; }
+    .sel-pill {
+      background: var(--teal);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .sel-sep { color: var(--teal-dark); font-size: 14px; font-weight: 300; }
+    .sel-reset {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--teal-dark);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Section wrapper */
+    .section-block { margin-bottom: 36px; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-ttl { font-size: 17px; font-weight: 800; color: var(--gray-900); display: flex; align-items: center; gap: 6px; }
+    .badge-sample {
+      background: var(--yellow-bg);
+      color: var(--yellow-text);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Notice bar */
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--yellow-bg);
+      border: 1px solid #FFECB5;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--yellow-text);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── PROMO CARDS ── */
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .promo-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+      border-top: 3px solid var(--teal);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .promo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .promo-card.orange-top { border-top-color: var(--orange); }
+    .promo-card.purple-top { border-top-color: var(--purple); }
+    .promo-card.wide-span { grid-column: span 2; }
+    @media (max-width: 580px) { .promo-card.wide-span { grid-column: span 1; } }
+
+    .promo-type-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      width: fit-content;
+    }
+    .tag-teal { background: var(--teal-light); color: var(--teal-dark); }
+    .tag-orange { background: var(--orange-light); color: #C44A1E; }
+    .tag-purple { background: var(--purple-light); color: var(--purple); }
+
+    .promo-name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .promo-desc { font-size: 13px; color: var(--gray-600); line-height: 1.55; flex: 1; }
+    .promo-benefit-box {
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .pb-label { font-size: 11px; font-weight: 600; color: var(--gray-500); margin-bottom: 3px; }
+    .pb-value { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+    .promo-tags-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .p-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    /* ── STATS CARDS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat-card.accent {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    }
+    .stat-card.accent-blue {
+      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+    }
+    .stat-lbl { font-size: 12px; color: var(--gray-600); line-height: 1.4; margin-bottom: 6px; }
+    .stat-card.accent .stat-lbl,
+    .stat-card.accent-blue .stat-lbl { color: rgba(255,255,255,0.82); }
+    .stat-val { font-size: 26px; font-weight: 900; color: var(--gray-900); letter-spacing: -1px; }
+    .stat-val span { font-size: 14px; font-weight: 600; letter-spacing: 0; }
+    .stat-card.accent .stat-val,
+    .stat-card.accent-blue .stat-val { color: #fff; }
+    .stat-hint { font-size: 11px; color: var(--gray-500); margin-top: 3px; }
+    .stat-card.accent .stat-hint,
+    .stat-card.accent-blue .stat-hint { color: rgba(255,255,255,0.65); }
+
+    .insight-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+    }
+    .insight-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .insight-item { flex: 1; min-width: 140px; }
+    .ii-label { font-size: 12px; color: var(--gray-600); margin-bottom: 4px; }
+    .ii-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .ii-value span { font-size: 13px; font-weight: 500; }
+    .ii-sub { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+    .insight-tip {
+      background: var(--teal-light);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      flex: 2;
+      min-width: 220px;
+    }
+    .insight-tip.blue-tip { background: #EFF6FF; }
+    .tip-ttl { font-size: 12px; font-weight: 700; color: var(--teal-dark); margin-bottom: 6px; }
+    .tip-ttl.blue { color: #1D4ED8; }
+    .tip-body { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+
+    /* ── RANK CARDS ── */
+    .rank-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 680px) {
+      .rank-grid { grid-template-columns: 1fr; }
+    }
+    .rank-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+    }
+    .rank-card-ttl {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+    .rank-item:last-child { margin-bottom: 0; }
+    .rank-num {
+      font-size: 13px;
+      font-weight: 900;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .rank-num.r1 { color: #F59E0B; }
+    .rank-num.r2 { color: #9CA3AF; }
+    .rank-num.r3 { color: #CD7F32; }
+    .rank-num.r4, .rank-num.r5 { color: var(--gray-400); }
+    .rank-info { flex: 1; min-width: 0; }
+    .rank-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .rank-bar-track {
+      height: 4px;
+      background: var(--gray-100);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .rank-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--teal), var(--teal-dark));
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+    .rank-pct { font-size: 11px; color: var(--gray-500); flex-shrink: 0; }
+
+    /* Day rank card */
+    .day-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .day-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .day-medal { font-size: 18px; flex-shrink: 0; }
+    .day-name { font-size: 14px; font-weight: 700; color: var(--gray-900); flex-shrink: 0; }
+    .day-bar-wrap { flex: 1; }
+    .day-bar-track {
+      height: 5px;
+      background: var(--gray-100);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .day-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, #F59E0B, #D97706);
+      border-radius: 3px;
+    }
+    .day-pct { font-size: 12px; color: #D97706; font-weight: 700; flex-shrink: 0; }
+
+    /* ── CASE CARDS ── */
+    .case-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+      margin-bottom: 14px;
+      transition: box-shadow 0.2s;
+    }
+    .case-card:hover { box-shadow: var(--shadow-md); }
+    .case-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .store-icon {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      background: var(--teal-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .s-name { font-size: 16px; font-weight: 700; }
+    .s-meta { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+    .ba-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .ba-col { text-align: center; }
+    .ba-period { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; margin-bottom: 6px; }
+    .ba-period.after { color: var(--teal-dark); }
+    .ba-metric { margin-bottom: 10px; }
+    .ba-metric:last-child { margin-bottom: 0; }
+    .ba-num { font-size: 20px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.5px; }
+    .ba-num.after { color: var(--teal-dark); }
+    .ba-numlbl { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+
+    .arrows-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .arr { font-size: 20px; color: var(--teal); }
+    .grow-pill {
+      background: var(--teal);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .grow-pill.orange { background: var(--orange); }
+
+    .metrics-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .m-chip {
+      flex: 1;
+      min-width: 90px;
+      background: var(--teal-light);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .m-lbl { font-size: 11px; color: var(--gray-600); margin-bottom: 3px; }
+    .m-val { font-size: 14px; font-weight: 700; color: var(--teal-dark); }
+
+    /* ── SALES GUIDE ── */
+    .sg-intro-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .sg-intro-chip {
+      padding: 7px 14px; border-radius: 24px; font-size: 12px; font-weight: 700;
+      color: white; cursor: pointer; opacity: 0.9; transition: opacity 0.15s, transform 0.15s;
+      text-decoration: none; display: inline-block;
+    }
+    .sg-intro-chip:hover { opacity: 1; transform: translateY(-1px); }
+    .sg-accordion { border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; box-shadow: var(--shadow-sm); }
+    .sg-hdr {
+      padding: 15px 20px; display: flex; align-items: center; gap: 10px;
+      cursor: pointer; user-select: none;
+    }
+    .sg-rank-badge {
+      background: rgba(255,255,255,0.22); color: white; font-size: 10px; font-weight: 800;
+      padding: 3px 10px; border-radius: 20px; flex-shrink: 0; letter-spacing: 0.3px; white-space: nowrap;
+    }
+    .sg-ttl { font-size: 15px; font-weight: 800; color: white; flex: 1; }
+    .sg-arr { color: rgba(255,255,255,0.8); font-size: 20px; transition: transform 0.25s; flex-shrink: 0; }
+    .sg-arr.open { transform: rotate(90deg); }
+    .sg-body { display: none; background: white; }
+    .sg-body.open { display: block; padding: 20px; }
+
+    .quote-box {
+      background: var(--gray-50); border-radius: var(--radius-sm);
+      border-left: 3px solid var(--gray-300); padding: 14px 16px; margin-bottom: 16px;
+    }
+    .quote-box-lbl { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; margin-bottom: 10px; }
+    .q-item {
+      font-size: 12px; color: var(--gray-700); line-height: 1.65;
+      padding: 6px 0 6px 16px; border-bottom: 1px solid var(--gray-200); position: relative;
+    }
+    .q-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .q-item::before { content: '"'; position: absolute; left: 0; top: 6px; color: var(--gray-400); font-size: 16px; font-weight: 700; line-height: 1; }
+
+    .resp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .resp-card {
+      background: white; border-radius: var(--radius-sm); border: 1.5px solid var(--gray-200);
+      padding: 16px; display: flex; flex-direction: column; gap: 8px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .resp-card:hover { border-color: var(--teal); box-shadow: 0 2px 12px rgba(42,193,188,0.12); }
+    .resp-card.wide { grid-column: span 2; }
+    @media (max-width: 560px) { .resp-card.wide { grid-column: span 1; } }
+    .resp-ttl { font-size: 14px; font-weight: 800; color: var(--gray-900); line-height: 1.35; }
+    .resp-body { font-size: 12px; color: var(--gray-700); line-height: 1.8; flex: 1; }
+    .resp-body .kn { font-weight: 800; color: var(--teal-dark); font-size: 13px; }
+    .resp-body .knr { font-weight: 800; color: #C53030; font-size: 13px; }
+    .resp-ref { font-size: 10px; color: var(--gray-500); background: var(--gray-100); padding: 3px 8px; border-radius: 6px; width: fit-content; margin-top: 4px; }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px 10px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .tab-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
+    .tab-btn.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(42,193,188,0.3);
+    }
+    @media (max-width: 600px) {
+      .tab-btn { font-size: 11px; padding: 9px 8px; min-width: 90px; }
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 32px 16px;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    /* ── PASSWORD SCREEN ── */
+    #pw-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--gray-50);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .pw-box {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .pw-logo { font-size: 32px; margin-bottom: 8px; }
+    .pw-title { font-size: 18px; font-weight: 900; color: var(--gray-900); margin-bottom: 4px; letter-spacing: -0.3px; }
+    .pw-sub { font-size: 13px; color: var(--gray-600); margin-bottom: 28px; }
+    .pw-label { font-size: 12px; font-weight: 600; color: var(--gray-600); text-align: left; display: block; margin-bottom: 6px; }
+    .pw-input-wrap { position: relative; margin-bottom: 12px; }
+    .pw-input {
+      width: 100%;
+      padding: 13px 44px 13px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      color: var(--gray-900);
+      letter-spacing: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pw-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,193,188,0.15); }
+    .pw-input.error { border-color: #E53E3E; box-shadow: 0 0 0 3px rgba(229,62,62,0.15); }
+    .pw-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-500);
+      font-size: 16px;
+      line-height: 1;
+      padding: 0;
+    }
+    .pw-error-msg {
+      font-size: 12px;
+      color: #E53E3E;
+      text-align: left;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .pw-error-msg.show { display: block; }
+    .pw-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      letter-spacing: -0.2px;
+    }
+    .pw-btn:hover { background: var(--teal-dark); box-shadow: 0 4px 14px rgba(42,193,188,0.4); }
+    .pw-footer-note { font-size: 11px; color: var(--gray-500); margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<!-- ── PASSWORD SCREEN ── -->
+<div id="pw-screen">
+  <div class="pw-box">
+    <div class="pw-logo">🛵</div>
+    <div class="pw-title">HV 상담 지원 TOOL</div>
+    <div class="pw-sub">배달의민족 영업 담당자 전용 서비스입니다</div>
+    <label class="pw-label">비밀번호</label>
+    <div class="pw-input-wrap">
+      <input class="pw-input" id="pwInput" type="password"
+        placeholder="비밀번호를 입력하세요"
+        onkeydown="if(event.key==='Enter') checkPw()">
+      <button class="pw-toggle" onclick="togglePw()" tabindex="-1" title="비밀번호 표시">👁</button>
+    </div>
+    <div class="pw-error-msg" id="pwError">비밀번호가 올바르지 않습니다.</div>
+    <button class="pw-btn" onclick="checkPw()">입장하기</button>
+    <div class="pw-footer-note">배달의민족 영업 담당자 전용 · 무단 공유 금지</div>
+  </div>
+</div>
+
+<script>
+  // 비밀번호: 오늘 날짜 8자리 자동 적용 (예: 20260522)
+  function getTodayPw() {
+    const t = new Date();
+    const yyyy = t.getFullYear();
+    const mm   = String(t.getMonth() + 1).padStart(2, '0');
+    const dd   = String(t.getDate()).padStart(2, '0');
+    return `${yyyy}${mm}${dd}`;
+  }
+  const ACCESS_PW = getTodayPw();
+
+  (function() {
+    if (sessionStorage.getItem('hvc_auth') === ACCESS_PW) {
+      document.getElementById('pw-screen').style.display = 'none';
+    }
+  })();
+
+  function checkPw() {
+    const val = document.getElementById('pwInput').value;
+    const inp = document.getElementById('pwInput');
+    const err = document.getElementById('pwError');
+    if (val === ACCESS_PW) {
+      sessionStorage.setItem('hvc_auth', ACCESS_PW);
+      document.getElementById('pw-screen').style.display = 'none';
+    } else {
+      inp.classList.add('error');
+      err.classList.add('show');
+      inp.value = '';
+      inp.focus();
+      setTimeout(() => { inp.classList.remove('error'); err.classList.remove('show'); }, 3000);
+    }
+  }
+
+  function togglePw() {
+    const inp = document.getElementById('pwInput');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+</script>
+
+<!-- ── STICKY HEADER (유의사항 + 헤더) ── -->
+<div class="sticky-header">
+  <div class="top-notice">
+    <span class="tn-icon">⚠️</span>
+    파트너님 상담 시 활용을 위한 데이터로, 외부 유출되지 않도록 반드시 주의해주시기 바랍니다.
+  </div>
+  <div class="header-bar">
+    <div class="header-inner">
+      <div class="logo-area">
+        <div class="logo">🛵 파트너님을 위한 추가 정보 알려드립니다!</div>
+        <div class="tagline">HV 상담 지원 TOOL</div>
+      </div>
+      <div class="header-badge">영업 담당자 전용</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── FILTER CARD ── -->
+  <div class="filter-card">
+    <div class="step-row">
+      <span class="step-badge">STEP 1</span>
+      <span class="step-title">지역 선택</span>
+    </div>
+
+    <div class="region-row">
+      <div class="select-wrap">
+        <label class="select-label">광역시/도 (rgn1)</label>
+        <div class="select-outer">
+          <select id="rgn1" onchange="onRgn1Change()">
+            <option value="">시/도를 선택하세요</option>
+            <option>서울특별시</option><option>부산광역시</option><option>인천광역시</option>
+            <option>대구광역시</option><option>대전광역시</option><option>광주광역시</option>
+            <option>울산광역시</option><option>세종특별자치시</option><option>경기도</option>
+            <option>강원도</option><option>충청북도</option><option>충청남도</option>
+            <option>전라북도</option><option>전라남도</option><option>경상북도</option>
+            <option>경상남도</option><option>제주특별자치도</option>
+          </select>
+        </div>
+      </div>
+      <div class="select-wrap">
+        <label class="select-label">시/군/구 (rgn2)</label>
+        <div class="select-outer">
+          <select id="rgn2" onchange="onFilterChange()" disabled>
+            <option value="">시/도 먼저 선택하세요</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="step-row">
+      <span class="step-badge">STEP 2</span>
+      <span class="step-title">카테고리 선택</span>
+    </div>
+
+    <div class="category-grid" id="catGrid"></div>
+
+    <button class="cta-btn" id="searchBtn" disabled onclick="showResults()">
+      지역과 카테고리를 선택해주세요
+    </button>
+  </div>
+
+  <!-- ── RESULTS ── -->
+  <div class="results" id="results">
+
+    <div class="selection-bar">
+      <span class="sel-icon">📍</span>
+      <span class="sel-pill" id="pill1">—</span>
+      <span class="sel-sep">›</span>
+      <span class="sel-pill" id="pill2">—</span>
+      <span class="sel-sep">›</span>
+      <span class="sel-pill" id="pill3">—</span>
+      <span class="sel-reset" onclick="resetFilters()">다시 선택</span>
+    </div>
+
+    <!-- ── 탭 바 ── -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tbtn-guide" onclick="switchTab('guide')">🛡️ 거절 반론<br>극복 가이드</button>
+      <button class="tab-btn" id="tbtn-area"  onclick="switchTab('area')">🏘️ 상권<br>데이터</button>
+      <button class="tab-btn" id="tbtn-baemin" onclick="switchTab('baemin')">📊 상권<br>배민 데이터</button>
+      <button class="tab-btn" id="tbtn-case"  onclick="switchTab('case')">🏆 성장<br>사례</button>
+      <button class="tab-btn" id="tbtn-promo" onclick="switchTab('promo')">🎁 파트너님<br>혜택</button>
+    </div>
+
+    <!-- ── TAB: 거절 반론 극복 가이드 ── -->
+    <div class="tab-panel active" id="tab-guide">
+
+    <!-- ── TAB: 혜택 ── -->
+    <div class="tab-panel" id="tab-promo">
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">🎁 파트너님께 드리는 혜택</div>
+      </div>
+      <div class="notice">
+        <span>💡</span>
+        <span>파트너님께 제공할 수 있는 혜택의 종류와 내용은 상황에 따라 변동될 수 있습니다.</span>
+      </div>
+      <div class="promo-grid" id="promoGrid"></div>
+    </div>
+
+    </div><!-- /tab-promo -->
+
+    <!-- ── TAB: 상권 데이터 ── -->
+    <div class="tab-panel" id="tab-area">
+    <!-- ② 파트너님 상권 데이터 (외식업 전체) -->
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">🏘️ 파트너님 상권 데이터</div>
+        <span class="badge-sample">샘플 데이터</span>
+      </div>
+      <div class="notice">
+        <span>⚠️</span>
+        <span>실제 데이터 연동 전 구조 확인용 샘플입니다. 배달 매출 제외 동종 카테고리 외식업 전체 기준입니다.</span>
+      </div>
+      <div class="stats-grid" id="areaStatsGrid"></div>
+      <div class="insight-card" id="areaInsightCard"></div>
+    </div>
+
+    </div><!-- /tab-area -->
+
+    <!-- ── TAB: 배민 데이터 ── -->
+    <div class="tab-panel" id="tab-baemin">
+    <!-- ③ 파트너님 상권 배민 데이터 -->
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">📊 파트너님 상권 배민 데이터</div>
+        <span class="badge-sample">샘플 데이터</span>
+      </div>
+      <div class="notice">
+        <span>⚠️</span>
+        <span>실제 데이터 연동 전 구조 확인용 샘플입니다. 실제 수치는 데이터 소스 연결 후 자동으로 반영됩니다.</span>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="insight-card" id="insightCard"></div>
+      <!-- 인기 메뉴 / 주문 시간대 / 주문 요일 -->
+      <div class="rank-grid" id="rankGrid"></div>
+    </div>
+
+    </div><!-- /tab-baemin -->
+
+    <!-- ── TAB: 성장 사례 ── -->
+    <div class="tab-panel" id="tab-case">
+    <!-- ④ 같은 카테고리 실제 성장 사례 -->
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">🏆 같은 카테고리 실제 성장 사례</div>
+        <span class="badge-sample">샘플 데이터</span>
+      </div>
+      <div class="notice">
+        <span>⚠️</span>
+        <span>실제 입점 파트너 성과 데이터로 교체 예정입니다. 현재는 구조 확인용 샘플 사례입니다.</span>
+      </div>
+      <div id="caseContainer"></div>
+    </div>
+
+    </div><!-- /tab-case -->
+
+    <!-- ── TAB: 거절 반론 극복 가이드 (content) ── -->
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">🛡️ 거절 반론 극복 가이드</div>
+      </div>
+      <div class="notice">
+        <span>💡</span>
+        <span>업주님의 주요 거절 유형별 응대 포인트입니다. 항목을 눌러 세일즈 메시지를 확인하세요.</span>
+      </div>
+
+      <!-- 빠른 이동 칩 -->
+      <div class="sg-intro-chips">
+        <a class="sg-intro-chip" style="background:#C53030" onclick="openSg('sg1')">① 브랜드/서비스 불신</a>
+        <a class="sg-intro-chip" style="background:#C05621" onclick="openSg('sg2')">② 과거 운영 피로도</a>
+        <a class="sg-intro-chip" style="background:#276749" onclick="openSg('sg3')">③ 수익성/수수료 불만</a>
+        <a class="sg-intro-chip" style="background:#2B6CB0" onclick="openSg('sg4')">④ 배차/라이더 이슈</a>
+        <a class="sg-intro-chip" style="background:#553C9A" onclick="openSg('sg5')">⑤ 운영 리스크</a>
+        <a class="sg-intro-chip" style="background:#B7791F" onclick="openSg('sg6')">⑥ 기회비용 계산</a>
+      </div>
+
+      <!-- ① 브랜드/서비스 불신 -->
+      <div class="sg-accordion">
+        <div class="sg-hdr" style="background:#C53030" onclick="toggleSg('sg1')">
+          <span class="sg-rank-badge">실패 1위</span>
+          <span class="sg-ttl">① 브랜드/서비스 불신</span>
+          <span class="sg-arr" id="sg1-arr">›</span>
+        </div>
+        <div class="sg-body" id="sg1-body">
+          <div class="quote-box">
+            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
+            <div class="q-item">배달의민족이라는 이름만 들어도 대화를 거부한다. 고객센터 대응이나 정산 문제로 너무 크게 실망했다.</div>
+            <div class="q-item">한번 해지하고 나갔던 곳이라 다시 들어갈 마음이 전혀 없다. 배민이라는 브랜드 자체에 대한 신뢰가 바닥이다.</div>
+            <div class="q-item">혜택 준다고 꼬드겨서 나중에 뒤통수칠까 봐 절대 안 믿는다.</div>
+          </div>
+          <div class="resp-grid">
+            <div class="resp-card">
+              <div class="resp-ttl">📞 파트너전담센터로 CS 품질이 달라졌습니다</div>
+              <div class="resp-body">
+                고객센터+광고가입센터를 <span class="kn">단일 채널로 통합</span>해 모든 문의를 한 곳에서 해결합니다.<br><br>
+                • 연결 대기시간 <span class="kn">28% 단축</span> (24년 대비 25년)<br>
+                • 점심 피크 대기시간 <span class="kn">55% 감소</span><br>
+                • 주문·배달·정산 문의 <span class="kn">24시간</span> 대응 가능<br><br>
+                이전에 경험하셨던 불편함은 이제 느끼지 않으실 것입니다.
+              </div>
+              <div class="resp-ref">근거: 24년 대비 25년 CS 품질 개선 지표</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">📊 시장 주도권은 배민에서 잡아야 합니다</div>
+              <div class="resp-body">
+                고객 리서치 결과 배민의 '주 이용률'은 <span class="kn">60.3%</span>로, CPE <span class="knr">28.8%</span> 대비 <span class="kn">▲31.5%p</span> 높습니다.<br><br>
+                배달앱 이용자 중 배민 <span class="kn">단독 이용률 33.4%</span> — 배민에 없으면 10명 중 3명의 고객이 아예 닿지 않습니다.<br><br>
+                압도적 이용률 = 실패 없는 매출 증명
+              </div>
+              <div class="resp-ref">근거: BM only 소비자 데이터 9p, 27p, 54p (25년 11월 기준)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② 과거 운영 피로도 -->
+      <div class="sg-accordion">
+        <div class="sg-hdr" style="background:#C05621" onclick="toggleSg('sg2')">
+          <span class="sg-rank-badge">실패 2위</span>
+          <span class="sg-ttl">② 과거 운영 피로도</span>
+          <span class="sg-arr" id="sg2-arr">›</span>
+        </div>
+        <div class="sg-body" id="sg2-body">
+          <div class="quote-box">
+            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
+            <div class="q-item">전에 배달 열었다가 정신이 하나도 없어서 장사를 접을 뻔했다. 그때 운영 피로도를 다시는 겪고 싶지 않다.</div>
+            <div class="q-item">배달 병행하느라 직원이 그만둘 정도로 힘들었던 기억이 있다. 배민까지 하면 다 도망갈 거다.</div>
+            <div class="q-item">매장 운영에 집중 못 하고 포스기만 쳐다보고 있어야 했던 그 스트레스를 다시 감당할 자신이 없다.</div>
+          </div>
+          <div class="resp-grid">
+            <div class="resp-card">
+              <div class="resp-ttl">📷 QR 오픽업 — 라이더 소통 걱정 끝</div>
+              <div class="resp-body">
+                라이더가 영수증 QR(또는 주문번호)을 직접 입력해 음식을 수령합니다.<br><br>
+                파트너님이 라이더와 일일이 확인할 필요가 <span class="kn">없어졌습니다.</span><br>
+                음식 픽업에 신경 쓸 일이 사라진 것이죠.
+              </div>
+              <div class="resp-ref">25년 2월 23일 도입</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">📱 라이더 안심번호 — 직접 소통 가능</div>
+              <div class="resp-body">
+                메뉴 누락이나 픽업 지연 시, 고객센터를 거치지 않고 <span class="kn">라이더와 직접 통화</span>가 가능합니다.<br><br>
+                기존의 번거로운 중간 단계가 모두 사라졌습니다.
+              </div>
+              <div class="resp-ref">24년 10월 29일 도입</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">✂️ 부분취소 — 고객센터 연결 없이 직접 처리</div>
+              <div class="resp-body">
+                메뉴 품절 시 주문접수채널에서 <span class="kn">직접 부분취소</span>가 가능합니다.<br><br>
+                바쁜 피크 타임에 고객센터 대기 없이 즉시 처리할 수 있어 운영 피로도가 크게 줄었습니다.
+              </div>
+              <div class="resp-ref">25년 3월 18일 도입</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ 수익성/수수료 불만 + 순수익 의구심 -->
+      <div class="sg-accordion">
+        <div class="sg-hdr" style="background:#276749" onclick="toggleSg('sg3')">
+          <span class="sg-rank-badge">실패 3위 · 7위 통합</span>
+          <span class="sg-ttl">③ 수익성/수수료 불만 · 순수익 의구심</span>
+          <span class="sg-arr" id="sg3-arr">›</span>
+        </div>
+        <div class="sg-body" id="sg3-body">
+          <div class="quote-box">
+            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
+            <div class="q-item">예전에 정산금 들어온 거 보고 기함했다. 고생은 고생대로 하고 수수료로 다 떼어가는 걸 직접 경험해보니 다신 하기 싫다.</div>
+            <div class="q-item">배달 매출 1,000만 원 찍어봤자 식자재비 빼고 수수료 빼고 나면, 홀 매출 300만 원 올린 것보다 순수익이 적은데 왜 해야 하나.</div>
+            <div class="q-item">겉만 화려한 배달보다 내실 있는 홀 장사가 최고다. 배달은 빛 좋은 개살구다.</div>
+          </div>
+          <div class="resp-grid">
+            <div class="resp-card wide">
+              <div class="resp-ttl">⏱️ 마진율이 아니라 '시간당 매출 생산성'으로 비교하세요</div>
+              <div class="resp-body">
+                홀 테이블 1개가 1시간 동안 만드는 매출보다, 동일 시간 내 배민 배달 주문의 합산 매출이 더 큽니다.<br><br>
+                📐 <strong>15평 · 10테이블 매장 기준</strong><br>
+                • 홀: 10테이블 × 1회전(60분) × 3만원 = <span class="knr">시간당 30만원</span><br>
+                • 배달: 주방 동시 조리 5건 × 4회전(15분) × 2.5만원 = <span class="kn">시간당 50만원</span><br><br>
+                수수료를 감안해도 시간당 매출 생산성은 배달이 더 실속있는 수단입니다.
+              </div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">📈 배민 입점 후 배달매출 총량이 증가합니다</div>
+              <div class="resp-body">
+                타사 매출이 빠지는 것이 아니라, 전체 배달매출이 상승하며 3개월 이후에도 유지됩니다.<br><br>
+                • 서울: 입점 1개월 후 <span class="kn">+26.3%</span> → 3개월 후 +32.4%<br>
+                • 경인: 입점 1개월 후 <span class="kn">+173.6%</span> → 3개월 후 +185.4%<br>
+                • 지방 광역시: <span class="kn">+140.3%</span> → +117.7%<br>
+                • 지방 도시: <span class="kn">+240.2%</span> → +103.8%
+              </div>
+              <div class="resp-ref">근거: 셀기실 매출 분석 데이터</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">💰 증가한 배달매출의 대부분이 배민에서 발생합니다</div>
+              <div class="resp-body">
+                배민 입점 후 1개월, 증가한 배달매출 중 배민 기여도:<br><br>
+                • 서울: <span class="kn">약 107%</span> — 증가분 전부가 배민 매출<br>
+                • 경인: 약 60%<br>
+                • 지방 광역시: 약 71%<br>
+                • 지방 도시: 약 61%<br><br>
+                입점 3개월 후에도 전체 배달매출의 <span class="kn">24~57%</span>가 배민 매출로 안정적 형성
+              </div>
+              <div class="resp-ref">근거: 셀기실 매출 분석 데이터</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">🧮 수익계산기로 수수료 오해 직접 해소</div>
+              <div class="resp-body">
+                세일즈포스 수익계산기를 활용해 지역·객단가·일 주문수·중개이용료·배달비·수수료·원가 입력 시 <span class="kn">일간·월간 예상 수익</span>을 실제 금액으로 확인할 수 있습니다.<br><br>
+                총 매출 / 비용 / 순수익을 눈으로 보여주며 수수료 오해를 해소하세요.
+              </div>
+              <a href="https://woowahan.lightning.force.com/lightning/popout/utility?0.windowed=true"
+                 target="_blank" rel="noopener"
+                 style="display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:8px 14px;background:var(--teal);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:background 0.2s;"
+                 onmouseover="this.style.background='var(--teal-dark)'" onmouseout="this.style.background='var(--teal)'">
+                🔗 수익계산기 바로가기
+              </a>
+              <div class="resp-ref" style="margin-top:6px;">세일즈포스 로그인 후 이용 가능</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ 배차/라이더 이슈 -->
+      <div class="sg-accordion">
+        <div class="sg-hdr" style="background:#2B6CB0" onclick="toggleSg('sg4')">
+          <span class="sg-rank-badge">실패 4위</span>
+          <span class="sg-ttl">④ 배차/라이더 이슈</span>
+          <span class="sg-arr" id="sg4-arr">›</span>
+        </div>
+        <div class="sg-body" id="sg4-body">
+          <div class="quote-box">
+            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
+            <div class="q-item">배민 기사가 30분 넘게 안 와서 음식이 다 식어버리고, 손님한테 쌍욕 먹고 환불해줬던 트라우마가 아직도 생생하다.</div>
+            <div class="q-item">배달 지연으로 악성 리뷰 달리는 걸 보면서 배민 라이더 시스템에 정이 다 떨어졌다. 쿠팡은 그런 면에서 훨씬 관리가 잘 된다.</div>
+            <div class="q-item">기사가 픽업을 안 와서 내가 직접 배달 나갔던 적도 있다. 그런 배차 리스크를 다시 지고 싶지 않다.</div>
+          </div>
+          <div class="resp-grid">
+            <div class="resp-card wide">
+              <div class="resp-ttl">🚀 전국 배차시간·배달시간 대폭 단축 (24년 대비 25년)</div>
+              <div class="resp-body">
+                • 수도권: 배차시간 <span class="kn">6.5% 단축</span>, 픽업시간 4% 단축<br>
+                • 충청권: 배차시간 <span class="kn">19.6% 단축</span>, 배달시간 2.7% 단축<br>
+                • 영남권: 배차시간 <span class="kn">18.4% 단축</span>, 배달시간 3.4% 단축<br>
+                • 호남권: 배차시간 <span class="kn">28.2% 단축</span>, 배달시간 4.5% 단축<br>
+                • 강원도: 배차시간 12.8% 단축 / 제주도: 배차시간 22.2% 단축
+              </div>
+              <div class="resp-ref">근거: 배달 품질 지표 (24년 대비 25년)</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">🏆 라이더 인센티브 강화로 배차 안정성 향상</div>
+              <div class="resp-body">
+                ① <strong>2주 등급제</strong>: 월 단위 → 2주 단위 등급 산정으로 더 빠른 피드백, 촘촘한 관리<br><br>
+                ② <strong>환경 포인트</strong>: 거리·시간·기상·휴일에 따른 추가 포인트 지급<br><br>
+                ③ <strong>등급별 할증제</strong>: 정액제에서 변경, 피크 타임에도 라이더 수익 강화 → 안정적 배차 보장
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ 운영 리스크 -->
+      <div class="sg-accordion">
+        <div class="sg-hdr" style="background:#553C9A" onclick="toggleSg('sg5')">
+          <span class="sg-rank-badge">실패 5위</span>
+          <span class="sg-ttl">⑤ 운영 리스크</span>
+          <span class="sg-arr" id="sg5-arr">›</span>
+        </div>
+        <div class="sg-body" id="sg5-body">
+          <div class="quote-box">
+            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
+            <div class="q-item">홀 손님 응대만으로도 주방이 꽉 차는데, 배달 주문까지 섞이면 순서가 꼬이고 실수가 나와서 단골 손님들까지 놓칠까 봐 겁난다.</div>
+            <div class="q-item">배달 기사들이 매장 앞에서 서성이는 것 자체가 홀 분위기를 망치고, 홀 손님들이 불편해하는 리스크를 감수하고 싶지 않다.</div>
+            <div class="q-item">피크 타임에 배달 주문이 몰리면 홀 서비스 질이 급격히 떨어진다.</div>
+          </div>
+          <div class="resp-grid">
+            <div class="resp-card">
+              <div class="resp-ttl">⚙️ 시스템 개선으로 홀 운영 부담 최소화</div>
+              <div class="resp-body">
+                • <strong>QR 오픽업</strong> (25.2.23): 라이더가 스스로 확인·수령 → 파트너 개입 불필요<br>
+                • <strong>안심번호</strong> (24.10.29): 라이더와 직접 통화 가능<br>
+                • <strong>부분취소</strong> (25.3.18): 품절 즉시 직접 처리<br><br>
+                배달이 홀 운영에 부담 주던 시대는 끝났습니다.
+              </div>
+              <div class="resp-ref">근거: 3가지 시스템 개선 도입 이력</div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">👥 배민 미입점 시 10명 중 3명의 고객을 잃습니다</div>
+              <div class="resp-body">
+                배달앱 이용자 중 배민 <span class="kn">단독 이용률 33.4%</span> — 배민에만 접속하는 고객입니다.<br><br>
+                • 지방 광역시: <span class="kn">43.9%</span>가 배민 단독 이용<br>
+                • 지방 도시: <span class="kn">47.3%</span>가 배민 단독 이용<br><br>
+                운영 부담 걱정보다, 놓치는 고객이 더 큰 리스크입니다.
+              </div>
+              <div class="resp-ref">근거: BM only 소비자 데이터 27p (25년 11월 기준)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑥ 기회비용 계산 -->
+      <div class="sg-accordion">
+        <div class="sg-hdr" style="background:#B7791F" onclick="toggleSg('sg6')">
+          <span class="sg-rank-badge">실패 6위</span>
+          <span class="sg-ttl">⑥ 기회비용 계산</span>
+          <span class="sg-arr" id="sg6-arr">›</span>
+        </div>
+        <div class="sg-body" id="sg6-body">
+          <div class="quote-box">
+            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
+            <div class="q-item">배달용 포장 용기 준비하고 라이더 응대할 시간에 홀 손님 고기 한 점 더 구워드리는 게 장기적으로 훨씬 이득이다.</div>
+            <div class="q-item">배달은 주문 들어올 때마다 신경이 분산된다. 그 에너지를 매장 방문객 만족도에 집중하는 게 기회비용 측면에서 낫다.</div>
+            <div class="q-item">우리 매장은 '공간의 경험'이 핵심인데, 배달로 나가면 그 가치를 전달할 수 없다. 홀 회전율에 집중하겠다.</div>
+          </div>
+          <div class="resp-grid">
+            <div class="resp-card">
+              <div class="resp-ttl">⚙️ 배달 운영 리소스는 최소화됩니다</div>
+              <div class="resp-body">
+                QR 오픽업·안심번호·부분취소 도입으로 배달 운영에 쏟아야 했던 시간과 에너지가 크게 줄었습니다.<br><br>
+                <span class="kn">홀 집중도를 유지하면서도 추가 매출 채널을 확보</span>할 수 있는 구조로 바뀌었습니다.
+              </div>
+              <div class="resp-ref">25년 2~3월 시스템 개선 3종 도입</div>
+            </div>
+            <div class="resp-card wide">
+              <div class="resp-ttl">⏱️ 홀 집중 vs 배달 병행 — 시간당 매출로 비교하세요</div>
+              <div class="resp-body">
+                📐 <strong>15평 · 10테이블 매장 기준</strong><br>
+                • 홀: 10테이블 × 1회전(60분) × 3만원 = <span class="knr">시간당 30만원</span><br>
+                • 배달: 주방 동시 조리 5건 × 4회전(15분) × 2.5만원 = <span class="kn">시간당 50만원</span><br><br>
+                같은 1시간, 같은 주방을 쓰는데 배달의 시간당 매출 생산성이 더 높습니다.<br>
+                기회비용을 따진다면, 배민 미입점이 더 큰 손실입니다.
+              </div>
+            </div>
+            <div class="resp-card">
+              <div class="resp-ttl">📊 배민의 압도적 이용률 = 놓치는 매출 기회</div>
+              <div class="resp-body">
+                배달앱 현재 이용률(25년 11월 기준):<br>
+                • 서울: 배민 <span class="kn">84.6%</span> vs CPE <span class="knr">64.8%</span><br>
+                • 지방 광역시: 배민 <span class="kn">87.8%</span> vs CPE <span class="knr">50.0%</span><br>
+                • 지방 도시: 배민 <span class="kn">85.5%</span> vs CPE <span class="knr">39.8%</span><br><br>
+                홀 집중이 기회비용이 낫다고 생각하실 때, 배민 고객층의 이 매출을 놓치고 있습니다.
+              </div>
+              <div class="resp-ref">근거: BM only 소비자 데이터 54p</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div><!-- /tab-guide -->
+
+  </div><!-- /results -->
+</div><!-- /container -->
+
+<div class="footer">배달의민족 파트너전담센터 1600-2111 &nbsp;|&nbsp; 배달의민족 영업 담당자 전용</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+const REGIONS = {
+  '서울특별시': ['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'],
+  '부산광역시': ['강서구','금정구','기장군','남구','동구','동래구','부산진구','북구','사상구','사하구','서구','수영구','연제구','영도구','중구','해운대구'],
+  '인천광역시': ['강화군','계양구','남동구','동구','미추홀구','부평구','서구','연수구','옹진군','중구'],
+  '대구광역시': ['달서구','달성군','동구','북구','서구','수성구','중구','남구'],
+  '대전광역시': ['대덕구','동구','서구','유성구','중구'],
+  '광주광역시': ['광산구','남구','동구','북구','서구'],
+  '울산광역시': ['남구','동구','북구','울주군','중구'],
+  '세종특별자치시': ['세종시'],
+  '경기도': ['가평군','고양시','과천시','광명시','광주시','구리시','군포시','김포시','남양주시','동두천시','부천시','성남시','수원시','시흥시','안산시','안성시','안양시','양주시','양평군','여주시','오산시','용인시','의왕시','의정부시','이천시','파주시','평택시','포천시','하남시','화성시'],
+  '강원도': ['강릉시','고성군','동해시','삼척시','속초시','양구군','양양군','영월군','원주시','인제군','정선군','철원군','춘천시','태백시','평창군','홍천군','화천군','횡성군'],
+  '충청북도': ['괴산군','단양군','보은군','영동군','옥천군','음성군','제천시','증평군','진천군','청주시','충주시'],
+  '충청남도': ['계룡시','공주시','금산군','논산시','당진시','보령시','부여군','서산시','서천군','아산시','예산군','천안시','청양군','태안군','홍성군'],
+  '전라북도': ['고창군','군산시','김제시','남원시','무주군','부안군','순창군','완주군','익산시','임실군','장수군','전주시','정읍시','진안군'],
+  '전라남도': ['강진군','고흥군','곡성군','광양시','구례군','나주시','담양군','목포시','무안군','보성군','순천시','신안군','여수시','영광군','영암군','완도군','장성군','장흥군','진도군','함평군','해남군','화순군'],
+  '경상북도': ['경산시','경주시','고령군','구미시','군위군','김천시','문경시','봉화군','상주시','성주군','안동시','영덕군','영양군','영주시','영천시','예천군','울릉군','울진군','의성군','청도군','청송군','칠곡군','포항시'],
+  '경상남도': ['거제시','거창군','고성군','김해시','남해군','밀양시','사천시','산청군','양산시','의령군','진주시','창녕군','창원시','통영시','하동군','함안군','함양군','합천군'],
+  '제주특별자치도': ['서귀포시','제주시']
+};
+
+const CATEGORIES = [
+  { id:'chicken',  name:'치킨',       emoji:'🍗' },
+  { id:'chinese',  name:'중식',       emoji:'🍜' },
+  { id:'pizza',    name:'피자',       emoji:'🍕' },
+  { id:'korean',   name:'한식',       emoji:'🍱' },
+  { id:'meat',     name:'고기',       emoji:'🥩' },
+  { id:'fastfood', name:'패스트푸드',  emoji:'🍔' },
+  { id:'jokbal',   name:'족발/보쌈',  emoji:'🐷' },
+  { id:'bunsik',   name:'분식',       emoji:'🍢' },
+  { id:'cafe',     name:'카페/디저트', emoji:'☕' },
+  { id:'tonkatsu', name:'돈까스/회',  emoji:'🍣' },
+  { id:'stew',     name:'찜/탕',      emoji:'🍲' },
+  { id:'dosirak',  name:'도시락',     emoji:'🥡' },
+  { id:'asian',    name:'아시안',     emoji:'🍛' },
+  { id:'western',  name:'양식',       emoji:'🍝' },
+  { id:'night',    name:'야식',       emoji:'🌙' }
+];
+
+// 혜택 카드 4종
+const PROMOTIONS = [
+  {
+    name: '중개이용료 지원',
+    type: '수수료 지원', tagClass: 'tag-teal', cardClass: '',
+    desc: '상세 내용 추후 반영',
+    benefitLabel: '지원 방식', benefit: '중개이용료 최대 OO% 지원 (조건 및 기간 확인 필요)',
+    tags: ['수수료 절감', '초기 지원', '수익성']
+  },
+  {
+    name: '배달비 지원',
+    type: '배달비 지원', tagClass: 'tag-orange', cardClass: 'orange-top',
+    desc: '상세 내용 추후 반영',
+    benefitLabel: '지원 구조', benefit: '배민 분담 + 파트너 분담 (비율 조정 가능)',
+    tags: ['파트너 부담 절감', '전환율', '탄력 설정']
+  },
+  {
+    name: "'줄서는맛집' 큐레이션 노출",
+    type: '프리미엄 큐레이션', tagClass: 'tag-teal', cardClass: '',
+    desc: '상세 내용 추후 반영',
+    benefitLabel: '노출 효과', benefit: '앱 내 프리미엄 큐레이션 섹션 노출',
+    tags: ['브랜드 가치', '신규 유입', '신뢰도']
+  }
+];
+
+// 카테고리별 인기 메뉴
+const CAT_MENUS = {
+  '치킨':      ['양념치킨','후라이드치킨','반반치킨','순살치킨','간장치킨'],
+  '중식':      ['짜장면','짬뽕','탕수육','볶음밥','군만두'],
+  '피자':      ['페퍼로니피자','불고기피자','콤비네이션','치즈피자','하와이안'],
+  '한식':      ['비빔밥','된장찌개','순두부찌개','불고기정식','제육볶음'],
+  '고기':      ['삼겹살 세트','목살 세트','갈비 세트','소불고기','항정살 세트'],
+  '패스트푸드': ['더블버거세트','치킨버거세트','치즈버거세트','클래식버거','너겟세트'],
+  '족발/보쌈': ['족발(중)','보쌈세트','반반세트','족발(대)','보쌈+족발'],
+  '분식':      ['떡볶이+순대세트','라볶이','김밥세트','순대+튀김','치즈떡볶이'],
+  '카페/디저트':['아메리카노','카페라떼','생크림케이크','에이드세트','마카롱세트'],
+  '돈까스/회': ['치즈돈까스','돈까스정식','모둠회','연어회','히레카츠'],
+  '찜/탕':     ['갈비찜','부대찌개','해물탕','순대국밥','닭볶음탕'],
+  '도시락':    ['제육볶음도시락','불고기도시락','닭갈비도시락','돈까스도시락','연어도시락'],
+  '아시안':    ['팟타이','쌀국수','분짜','나시고렝','그린카레'],
+  '양식':      ['로제파스타','크림파스타','마르게리타피자','리조또','봉골레파스타'],
+  '야식':      ['엽기떡볶이','치킨','피자','족발','라면+만두세트']
+};
+
+// 주문 시간대 top 5 (고정)
+const ORDER_TIMES = [
+  { label: '18:00 ~ 19:00', tag: '저녁 피크' },
+  { label: '19:00 ~ 20:00', tag: '저녁 후반' },
+  { label: '12:00 ~ 13:00', tag: '점심 피크' },
+  { label: '20:00 ~ 21:00', tag: '야간 초입' },
+  { label: '13:00 ~ 14:00', tag: '점심 후반' }
+];
+const TIME_PCTS = [100, 87, 71, 55, 40];
+
+// 주문 요일 top 3 (고정)
+const ORDER_DAYS = [
+  { day: '금요일', medal: '🥇', pct: 100 },
+  { day: '토요일', medal: '🥈', pct: 91 },
+  { day: '일요일', medal: '🥉', pct: 82 }
+];
+
+// ── STATE ──────────────────────────────────────────────────────
+let selCat = null;
+
+// ── INIT ──────────────────────────────────────────────────────
+(function init() {
+  const grid = document.getElementById('catGrid');
+  CATEGORIES.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-chip';
+    btn.textContent = c.emoji + ' ' + c.name;
+    btn.dataset.id = c.id;
+    btn.onclick = () => selectCat(c.id, c.name, btn);
+    grid.appendChild(btn);
+  });
+})();
+
+// ── HANDLERS ──────────────────────────────────────────────────
+function onRgn1Change() {
+  const rgn1 = document.getElementById('rgn1').value;
+  const sel2 = document.getElementById('rgn2');
+  sel2.innerHTML = '<option value="">시/군/구를 선택하세요</option>';
+  if (rgn1 && REGIONS[rgn1]) {
+    REGIONS[rgn1].forEach(d => {
+      const o = document.createElement('option');
+      o.value = d; o.textContent = d;
+      sel2.appendChild(o);
+    });
+    sel2.disabled = false;
+  } else {
+    sel2.innerHTML = '<option value="">시/도 먼저 선택하세요</option>';
+    sel2.disabled = true;
+  }
+  refreshBtn();
+}
+
+function onFilterChange() { refreshBtn(); }
+
+function selectCat(id, name, el) {
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selCat = { id, name };
+  refreshBtn();
+}
+
+function refreshBtn() {
+  const r1 = document.getElementById('rgn1').value;
+  const r2 = document.getElementById('rgn2').value;
+  const btn = document.getElementById('searchBtn');
+  if (r1 && r2 && selCat) {
+    btn.disabled = false;
+    btn.textContent = `${r2} · ${selCat.name} 정보 보기 →`;
+  } else {
+    btn.disabled = true;
+    btn.textContent = '지역과 카테고리를 선택해주세요';
+  }
+}
+
+function resetFilters() {
+  document.getElementById('results').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── SHOW RESULTS ──────────────────────────────────────────────
+function showResults() {
+  const r1 = document.getElementById('rgn1').value;
+  const r2 = document.getElementById('rgn2').value;
+  const cat = selCat.name;
+
+  document.getElementById('pill1').textContent = r1;
+  document.getElementById('pill2').textContent = r2;
+  document.getElementById('pill3').textContent = cat;
+
+  renderPromos();
+  renderAreaData(r1, r2, cat);
+  renderBaeminStats(r1, r2, cat);
+  renderCases(cat);
+  switchTab('guide'); // 결과 표시 시 항상 첫 탭(거절 반론 극복 가이드)부터
+
+  const res = document.getElementById('results');
+  res.classList.add('visible');
+  setTimeout(() => res.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+}
+
+// ── RENDER: PROMOS ────────────────────────────────────────────
+function renderPromos() {
+  const g = document.getElementById('promoGrid');
+  g.innerHTML = '';
+  PROMOTIONS.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'promo-card ' + (p.cardClass || '');
+    d.innerHTML = `
+      <span class="promo-type-tag ${p.tagClass}">${p.type}</span>
+      <div class="promo-name">${p.name}</div>
+      <div class="promo-desc">${p.desc}</div>
+      <div class="promo-benefit-box">
+        <div class="pb-label">${p.benefitLabel}</div>
+        <div class="pb-value">${p.benefit}</div>
+      </div>
+      <div class="promo-tags-row">${p.tags.map(t=>`<span class="p-tag">${t}</span>`).join('')}</div>
+    `;
+    g.appendChild(d);
+  });
+}
+
+// ── RENDER: 파트너님 상권 데이터 (외식업 전체, 비배달 포함) ────
+function renderAreaData(r1, r2, cat) {
+  const seed = (r1.length * 5 + r2.length * 9 + cat.length * 7) % 8;
+  const M = [0.75, 0.9, 1.0, 1.15, 1.3, 1.45, 1.65, 1.9][seed];
+
+  const totalStores  = Math.round(248 * M);
+  const avgRevAll    = Math.round(2600 * M).toLocaleString();
+  const top20RevAll  = Math.round(6200 * M).toLocaleString();
+  const mktSizeAll   = Math.round(31 * M * 10) / 10;
+  const delivRatio   = Math.round(32 + seed * 3);
+  const nonDelivery  = Math.round(totalStores * (1 - delivRatio / 100));
+
+  document.getElementById('areaStatsGrid').innerHTML = `
+    <div class="stat-card accent-blue">
+      <div class="stat-lbl">동종 카테고리<br>전체 외식업 가게 수</div>
+      <div class="stat-val">${totalStores}<span>개</span></div>
+      <div class="stat-hint">${r2} 기준 (배달+오프라인)</div>
+    </div>
+    <div class="stat-card accent-blue">
+      <div class="stat-lbl">상권 외식업<br>월 시장 규모</div>
+      <div class="stat-val">${mktSizeAll}<span>억원</span></div>
+      <div class="stat-hint">배달+오프라인 합산 추정</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">가게당 평균<br>월 매출</div>
+      <div class="stat-val">${avgRevAll}<span>만원</span></div>
+      <div class="stat-hint">전체 외식업 평균</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">상위 20%<br>평균 월 매출</div>
+      <div class="stat-val">${top20RevAll}<span>만원</span></div>
+      <div class="stat-hint">우수 가게 기준</div>
+    </div>
+  `;
+
+  document.getElementById('areaInsightCard').innerHTML = `
+    <div class="insight-inner">
+      <div class="insight-item">
+        <div class="ii-label">배달 서비스 이용 가게 비율</div>
+        <div class="ii-value">${delivRatio}<span>%</span></div>
+        <div class="ii-sub">배민 포함 배달앱 이용 기준</div>
+      </div>
+      <div class="insight-item">
+        <div class="ii-label">배달 미이용 가게 수</div>
+        <div class="ii-value">${nonDelivery}<span>개</span></div>
+        <div class="ii-sub">신규 입점 가능 잠재 파트너</div>
+      </div>
+      <div class="insight-tip blue-tip">
+        <div class="tip-ttl blue">💡 세일즈 포인트</div>
+        <div class="tip-body">
+          ${r2} <strong>${cat}</strong> 상권 외식업 시장 규모는 월 <strong>${mktSizeAll}억원</strong>입니다.
+          아직 배달 서비스를 이용하지 않는 <strong>${nonDelivery}개</strong> 가게가 잠재 파트너로,
+          배민배달 입점 시 기존 오프라인 매출에 <strong>추가 매출 채널</strong>을 확보할 수 있습니다.
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── RENDER: 파트너님 상권 배민 데이터 ────────────────────────
+function renderBaeminStats(r1, r2, cat) {
+  const seed = (r1.length * 3 + r2.length * 7 + cat.length * 11) % 8;
+  const M = [0.7, 0.85, 1.0, 1.1, 1.25, 1.4, 1.6, 1.8][seed];
+
+  const avgRev  = Math.round(3600 * M).toLocaleString();
+  const topRev  = Math.round(8200 * M).toLocaleString();
+  const avgOrd  = Math.round(1520 * M).toLocaleString();
+  const topOrd  = Math.round(3500 * M).toLocaleString();
+  const mktSize = Math.round(16 * M * 10) / 10;
+  const stores  = Math.round(88 * M);
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card accent">
+      <div class="stat-lbl">예상 추가매출<br>(상위 20% 평균)</div>
+      <div class="stat-val">${topRev}<span>만원</span></div>
+      <div class="stat-hint">월 기준 · 입점 후 3개월차</div>
+    </div>
+    <div class="stat-card accent">
+      <div class="stat-lbl">예상 추가주문수<br>(상위 20% 평균)</div>
+      <div class="stat-val">${topOrd}<span>건</span></div>
+      <div class="stat-hint">월 기준 · 입점 후 3개월차</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">${r2} ${cat}<br>배민 활성 가게 수</div>
+      <div class="stat-val">${stores}<span>개</span></div>
+      <div class="stat-hint">배민 기준</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">상권 배민 배달<br>시장 규모 (월)</div>
+      <div class="stat-val">${mktSize}<span>억원</span></div>
+      <div class="stat-hint">배민 기준 추정</div>
+    </div>
+  `;
+
+  document.getElementById('insightCard').innerHTML = `
+    <div class="insight-inner">
+      <div class="insight-item">
+        <div class="ii-label">배민 입점 시 예상 평균 매출</div>
+        <div class="ii-value">${avgRev}<span>만원/월</span></div>
+        <div class="ii-sub">전체 가게 평균 기준</div>
+      </div>
+      <div class="insight-item">
+        <div class="ii-label">배민 입점 시 예상 평균 주문수</div>
+        <div class="ii-value">${avgOrd}<span>건/월</span></div>
+        <div class="ii-sub">전체 가게 평균 기준</div>
+      </div>
+      <div class="insight-tip">
+        <div class="tip-ttl">💡 세일즈 포인트</div>
+        <div class="tip-body">
+          ${r2} <strong>${cat}</strong> 상권 배민 배달 시장은 월 <strong>${mktSize}억원</strong> 규모입니다.
+          배민배달 입점 시 커버리지 확대로 평균 <strong>+137% 주문 성장</strong>을 기대할 수 있으며,
+          상위 20% 파트너는 월 <strong>${topRev}만원</strong>의 배달 매출을 기록합니다.
+        </div>
+      </div>
+    </div>
+  `;
+
+  // 인기 메뉴, 주문 시간대, 요일 rank cards
+  renderRankCards(cat);
+}
+
+function renderRankCards(cat) {
+  const menus = CAT_MENUS[cat] || ['메뉴1','메뉴2','메뉴3','메뉴4','메뉴5'];
+  const menuPcts = [100, 82, 65, 48, 33];
+
+  const grid = document.getElementById('rankGrid');
+  grid.innerHTML = '';
+
+  // ── 인기 메뉴 Top 5
+  const menuCard = document.createElement('div');
+  menuCard.className = 'rank-card';
+  menuCard.innerHTML = `
+    <div class="rank-card-ttl">🍽️ 인기 메뉴 TOP 5</div>
+    ${menus.map((m, i) => `
+      <div class="rank-item">
+        <div class="rank-num r${i+1}">${i+1}</div>
+        <div class="rank-info">
+          <div class="rank-name">${m}</div>
+          <div class="rank-bar-track">
+            <div class="rank-bar-fill" style="width:${menuPcts[i]}%"></div>
+          </div>
+        </div>
+        <div class="rank-pct">${menuPcts[i]}%</div>
+      </div>
+    `).join('')}
+  `;
+  grid.appendChild(menuCard);
+
+  // ── 주문 시간대 Top 5
+  const timeCard = document.createElement('div');
+  timeCard.className = 'rank-card';
+  timeCard.innerHTML = `
+    <div class="rank-card-ttl">🕐 주문 시간대 TOP 5</div>
+    ${ORDER_TIMES.map((t, i) => `
+      <div class="rank-item">
+        <div class="rank-num r${i+1}">${i+1}</div>
+        <div class="rank-info">
+          <div class="rank-name">${t.label}</div>
+          <div class="rank-bar-track">
+            <div class="rank-bar-fill" style="width:${TIME_PCTS[i]}%"></div>
+          </div>
+        </div>
+        <div class="rank-pct">${t.tag}</div>
+      </div>
+    `).join('')}
+  `;
+  grid.appendChild(timeCard);
+
+  // ── 주문 많은 요일 Top 3
+  const dayCard = document.createElement('div');
+  dayCard.className = 'rank-card';
+  dayCard.innerHTML = `
+    <div class="rank-card-ttl">📅 배달 주문 많은 요일 TOP 3</div>
+    ${ORDER_DAYS.map(d => `
+      <div class="day-item">
+        <div class="day-medal">${d.medal}</div>
+        <div class="day-name">${d.day}</div>
+        <div class="day-bar-wrap">
+          <div class="day-bar-track">
+            <div class="day-bar-fill" style="width:${d.pct}%"></div>
+          </div>
+        </div>
+        <div class="day-pct">${d.pct}%</div>
+      </div>
+    `).join('')}
+  `;
+  grid.appendChild(dayCard);
+}
+
+// ── TAB SWITCHER ──────────────────────────────────────────────
+const TAB_IDS = ['guide','area','baemin','case','promo'];
+
+function switchTab(id) {
+  TAB_IDS.forEach(t => {
+    document.getElementById('tab-' + t).classList.remove('active');
+    document.getElementById('tbtn-' + t).classList.remove('active');
+  });
+  document.getElementById('tab-' + id).classList.add('active');
+  document.getElementById('tbtn-' + id).classList.add('active');
+}
+
+// ── SALES GUIDE ACCORDION ─────────────────────────────────────
+function toggleSg(id) {
+  const body = document.getElementById(id + '-body');
+  const arr  = document.getElementById(id + '-arr');
+  body.classList.toggle('open');
+  arr.classList.toggle('open');
+}
+
+function openSg(id) {
+  const body = document.getElementById(id + '-body');
+  const arr  = document.getElementById(id + '-arr');
+  if (!body.classList.contains('open')) {
+    body.classList.add('open');
+    arr.classList.add('open');
+  }
+  setTimeout(() => body.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+}
+
+// ── RENDER: 성장 사례 ─────────────────────────────────────────
+function renderCases(cat) {
+  const emojiMap = {
+    '치킨':'🍗','중식':'🍜','피자':'🍕','한식':'🍱','고기':'🥩',
+    '패스트푸드':'🍔','족발/보쌈':'🐷','분식':'🍢','카페/디저트':'☕',
+    '돈까스/회':'🍣','찜/탕':'🍲','도시락':'🥡','아시안':'🍛','양식':'🍝','야식':'🌙'
+  };
+  const icon = emojiMap[cat] || '🏪';
+
+  const cases = [
+    {
+      storeName: `○○ ${cat}`, icon,
+      region: '서울 송파구', period: '입점 후 3개월',
+      bRev: '2,100만원', aRev: '4,800만원', rGrow: '+129%',
+      bOrd: '820건', aOrd: '1,940건', oGrow: '+137%',
+      chips: [
+        { l:'리뷰 수', v:'234개' }, { l:'노출 증가', v:'+320%' },
+        { l:'재주문율', v:'42%' },  { l:'입점 채널', v:'배민배달' }
+      ]
+    },
+    {
+      storeName: `△△ ${cat}집`, icon,
+      region: '경기 수원시', period: '입점 후 6개월',
+      bRev: '3,200만원', aRev: '8,100만원', rGrow: '+153%',
+      bOrd: '1,240건', aOrd: '3,150건', oGrow: '+154%',
+      chips: [
+        { l:'리뷰 수', v:'412개' }, { l:'노출 증가', v:'+480%' },
+        { l:'재주문율', v:'51%' },  { l:'입점 채널', v:'가게배달+배민배달' }
+      ]
+    }
+  ];
+
+  const c = document.getElementById('caseContainer');
+  c.innerHTML = '';
+  cases.forEach(cs => {
+    const d = document.createElement('div');
+    d.className = 'case-card';
+    d.innerHTML = `
+      <div class="case-head">
+        <div class="store-icon">${cs.icon}</div>
+        <div>
+          <div class="s-name">${cs.storeName}</div>
+          <div class="s-meta">📍 ${cs.region} &nbsp;·&nbsp; ${cs.period}</div>
+        </div>
+      </div>
+      <div class="ba-container">
+        <div class="ba-col">
+          <div class="ba-period">입점 전</div>
+          <div class="ba-metric">
+            <div class="ba-num">${cs.bRev}</div>
+            <div class="ba-numlbl">월 매출</div>
+          </div>
+          <div class="ba-metric">
+            <div class="ba-num" style="font-size:17px">${cs.bOrd}</div>
+            <div class="ba-numlbl">월 주문수</div>
+          </div>
+        </div>
+        <div class="arrows-col">
+          <div class="arr">→</div>
+          <div class="grow-pill">매출 ${cs.rGrow}</div>
+          <div style="height:6px"></div>
+          <div class="grow-pill orange">주문 ${cs.oGrow}</div>
+        </div>
+        <div class="ba-col">
+          <div class="ba-period after">입점 후</div>
+          <div class="ba-metric">
+            <div class="ba-num after">${cs.aRev}</div>
+            <div class="ba-numlbl">월 매출</div>
+          </div>
+          <div class="ba-metric">
+            <div class="ba-num after" style="font-size:17px">${cs.aOrd}</div>
+            <div class="ba-numlbl">월 주문수</div>
+          </div>
+        </div>
+      </div>
+      
