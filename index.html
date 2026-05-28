@@ -247,6 +247,46 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
 .miss-col-sub { font-size:11px; color:var(--gray-500); margin-top:3px; }
 .miss-arrow { font-size:24px; color:var(--gray-400); }
 
+/* ── CALCULATOR (⑥) ── */
+.calc-wrap { max-width:640px; margin:0 auto; }
+.calc-notice { background:var(--teal-light); border-left:3px solid var(--teal); padding:10px 14px;
+  border-radius:var(--radius-sm); font-size:13px; font-weight:700; color:var(--teal-dark); margin-bottom:16px; }
+.calc-auto-row { margin-bottom:12px; }
+.calc-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.calc-field { display:flex; flex-direction:column; gap:4px; }
+.calc-label { font-size:12px; font-weight:700; color:var(--gray-700); display:flex; align-items:center; gap:6px; }
+.calc-label.required::before { content:'*'; color:#e53e3e; }
+.calc-auto-badge { font-size:10px; background:var(--teal-light); color:var(--teal-dark); padding:1px 6px; border-radius:8px; font-weight:600; }
+.calc-inp { padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; outline:none; transition:border 0.2s; }
+.calc-inp:focus { border-color:var(--teal); }
+.calc-inp-readonly { background:var(--gray-100); color:var(--gray-600); cursor:default; }
+.calc-optional-toggle { padding:10px 14px; background:var(--gray-100); border-radius:8px; font-size:13px;
+  font-weight:700; color:var(--gray-700); cursor:pointer; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.calc-optional-toggle:hover { background:var(--gray-200); }
+.calc-optional { padding:12px 0; }
+.calc-btn { width:100%; padding:14px; background:var(--teal); color:#fff; border:none; border-radius:10px;
+  font-size:16px; font-weight:800; cursor:pointer; margin-top:8px; transition:background 0.2s; }
+.calc-btn:hover { background:var(--teal-dark); }
+.calc-result-daily-wrap { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0 16px; }
+.calc-result-box { padding:20px 16px; border-radius:var(--radius-sm); text-align:center; }
+.calc-result-box.daily { background:#FFF3E0; border:1px solid #FFCC80; }
+.calc-result-box.monthly { background:#FFF3E0; border:2px solid #FF9800; }
+.calc-result-period { font-size:13px; font-weight:700; color:#E65100; margin-bottom:4px; }
+.calc-result-val { font-size:22px; font-weight:900; color:#BF360C; }
+.calc-detail { background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius-sm); overflow:hidden; }
+.calc-detail-row { display:flex; align-items:center; justify-content:space-between; padding:11px 16px;
+  border-bottom:1px solid var(--gray-100); font-size:14px; }
+.calc-detail-row:last-child { border-bottom:none; }
+.calc-detail-row.main { font-weight:700; background:var(--gray-50); }
+.calc-detail-row.main.cost { position:relative; }
+.calc-detail-row.main.profit { font-size:16px; color:var(--teal-dark); background:var(--teal-light); }
+.calc-detail-row.sub { font-size:13px; color:var(--gray-600); padding-left:28px; }
+.calc-detail-toggle { background:none; border:none; cursor:pointer; font-size:13px; color:var(--gray-500); padding:2px 6px; }
+.calc-disclaimer { font-size:11px; color:var(--gray-500); background:var(--gray-50); border-radius:8px;
+  padding:10px 14px; margin-top:12px; line-height:1.6; border:1px solid var(--gray-200); }
+.dong-badge { display:inline-block; font-size:10px; background:#E3F2FD; color:#1565C0; padding:1px 7px;
+  border-radius:8px; font-weight:700; margin-left:6px; vertical-align:middle; }
+
 /* ── EXPECTED (⑤) ── */
 .expect-hero { text-align:center; padding:20px 16px;
   background:linear-gradient(135deg,var(--teal-light),#fff);
@@ -473,6 +513,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
     <button class="tab-btn" id="tbtn-expect" onclick="switchTab('expect')">
       <span class="tab-num">⑤</span>예상 성과
     </button>
+    <button class="tab-btn" id="tbtn-calc" onclick="switchTab('calc')">
+      <span class="tab-num">⑥</span>수익 계산기
+    </button>
   </div>
 
   <!-- ① 상권 진단 -->
@@ -540,6 +583,100 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
         <div class="section-ttl">✨ 배민 입점 시 예상 성과</div>
       </div>
       <div id="expectContent"></div>
+    </div>
+  </div>
+
+  <!-- ⑥ 수익 계산기 -->
+  <div class="tab-panel" id="tab-calc">
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">🧮 수익 계산기</div>
+      </div>
+      <div id="calcContent">
+        <div class="calc-wrap">
+          <div class="calc-notice">📌 가게에 대한 정보를 입력해주세요.</div>
+          <div class="calc-auto-row">
+            <div class="calc-field">
+              <label class="calc-label">지역 <span class="calc-auto-badge">자동감지</span></label>
+              <input type="text" class="calc-inp calc-inp-readonly" id="calcRegion" readonly>
+            </div>
+          </div>
+          <div class="calc-grid">
+            <div class="calc-field">
+              <label class="calc-label required">객단가 (원)</label>
+              <input type="number" class="calc-inp" id="calcPrice" placeholder="숫자만 입력">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label required">일 주문수</label>
+              <input type="number" class="calc-inp" id="calcOrders" placeholder="숫자만 입력">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label required">중개이용료 (%)</label>
+              <input type="number" class="calc-inp" id="calcCommission" value="7.8" step="0.1">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label required">배달비 (원) <span class="calc-auto-badge">지역 자동설정</span></label>
+              <input type="number" class="calc-inp" id="calcDelivery" placeholder="숫자만 입력">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label required">결제수수료 (%)</label>
+              <input type="number" class="calc-inp" id="calcPayFee" value="1.5" step="0.1">
+            </div>
+          </div>
+          <div class="calc-optional-toggle" onclick="toggleCalcOptional()">
+            <span id="calcOptToggleIcon">▶</span> 선택 항목 (음식원가 · 할인금액)
+          </div>
+          <div class="calc-optional" id="calcOptional" style="display:none;">
+            <div class="calc-grid">
+              <div class="calc-field">
+                <label class="calc-label">음식원가 (%)</label>
+                <input type="number" class="calc-inp" id="calcFoodCost" placeholder="숫자만 입력" step="0.1">
+              </div>
+              <div class="calc-field">
+                <label class="calc-label">할인금액 (원)</label>
+                <input type="number" class="calc-inp" id="calcDiscount" placeholder="숫자만 입력">
+              </div>
+            </div>
+          </div>
+          <button class="calc-btn" onclick="runCalc()">🧮 계산하기</button>
+          <div id="calcResult" style="display:none;">
+            <div class="calc-result-daily-wrap">
+              <div class="calc-result-box daily">
+                <div class="calc-result-period">일간</div>
+                <div class="calc-result-val" id="calcDailyVal">—</div>
+              </div>
+              <div class="calc-result-box monthly">
+                <div class="calc-result-period">월간</div>
+                <div class="calc-result-val" id="calcMonthlyVal">—</div>
+              </div>
+            </div>
+            <div class="calc-detail">
+              <div class="calc-detail-row main">
+                <span>매출 (월)</span><span id="cdSales">—</span>
+              </div>
+              <div class="calc-detail-row main cost">
+                <span>비용 (월)</span>
+                <span id="cdCost">—</span>
+                <button class="calc-detail-toggle" id="cdToggleBtn" onclick="toggleCalcDetail()">▼</button>
+              </div>
+              <div id="cdBreakdown" style="display:none;">
+                <div class="calc-detail-row sub"><span>• 중개이용료 (월)</span><span id="cdCommission">—</span></div>
+                <div class="calc-detail-row sub"><span>• 배달비 (월)</span><span id="cdDelivery">—</span></div>
+                <div class="calc-detail-row sub"><span>• 결제수수료 (월)</span><span id="cdPayFee">—</span></div>
+                <div class="calc-detail-row sub"><span>• 부가세 (월)</span><span id="cdVat">—</span></div>
+                <div class="calc-detail-row sub" id="cdDiscountRow" style="display:none;"><span>• 할인금액 (월)</span><span id="cdDiscount">—</span></div>
+                <div class="calc-detail-row sub" id="cdFoodCostRow" style="display:none;"><span>• 음식원가 (월)</span><span id="cdFoodCost">—</span></div>
+              </div>
+              <div class="calc-detail-row main profit">
+                <span>수익 (월)</span><span id="cdProfit">—</span>
+              </div>
+            </div>
+            <div class="calc-disclaimer">
+              ⚠️ 본 계산 결과는 입력값 기반 참고용 예시이며, 실제 가게 운영 환경에 따라 수익은 달라질 수 있습니다.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -885,7 +1022,16 @@ function setResultRadius(r) {
 // ══════════════════════════════════════════════════
 // TAB SWITCHER
 // ══════════════════════════════════════════════════
-const TAB_IDS = ['market','compete','miss','cases','expect'];
+const TAB_IDS = ['market','compete','miss','cases','expect','calc'];
+
+// 지역별 배달비 기본값 (배민배달 기준)
+const DELIVERY_FEE_BY_REGION = {
+  '서울특별시':3400, '부산광역시':3600, '대구광역시':3600, '인천광역시':3600,
+  '광주광역시':3600, '대전광역시':3600, '울산광역시':3600, '세종특별자치시':4000,
+  '경기도':3800, '강원도':4200, '강원특별자치도':4200,
+  '충청북도':4000, '충청남도':4000, '전라북도':4200, '전북특별자치도':4200,
+  '전라남도':4200, '경상북도':4200, '경상남도':4200, '제주특별자치도':4800
+};
 function switchTab(id) {
   TAB_IDS.forEach(function(t) {
     document.getElementById('tab-'+t).classList.remove('active');
@@ -900,17 +1046,20 @@ function switchTab(id) {
 // RENDER ALL
 // ══════════════════════════════════════════════════
 function renderAllResults(r1, r2, cat) {
-  // Update header
+  const dong = _detectedDong || '';
+  // 헤더: 동 단위까지 표시
   document.getElementById('resultPartnerName').textContent = _partnerName || '파트너님 상호';
-  document.getElementById('resultRegionTag').textContent = r2 || r1;
+  const regionLabel = dong ? r2 + ' ' + dong : r2 || r1;
+  document.getElementById('resultRegionTag').textContent = regionLabel;
   document.getElementById('resultCatTag').textContent = cat;
   document.getElementById('resultRadiusTag').textContent = _mapRadius >= 1000 ? '1km 반경' : _mapRadius + 'm 반경';
   document.getElementById('resultAddr').textContent = _partnerAddr;
-  renderAreaData(r1, r2, cat);
-  renderBaeminStats(r1, r2, cat);
-  renderMissedCustomers(r1, r2, cat);
+  renderAreaData(r1, r2, cat);           // ① 외부 데이터 → rgn2 유지
+  renderBaeminStats(r1, r2, dong, cat);  // ② 배민 내부 → dong 단위
+  renderMissedCustomers(r1, r2, dong, cat); // ③ 배민 내부 → dong 단위
   renderCaseCards(cat);
-  renderExpectedResults(r1, r2, cat);
+  renderExpectedResults(r1, r2, dong, cat); // ⑤ 배민 내부 → dong 단위
+  renderCalcTab(r1, r2, dong);           // ⑥ 계산기 초기화
   switchTab('market');
 }
 
@@ -980,7 +1129,9 @@ function renderAreaData(r1, r2, cat) {
 // ══════════════════════════════════════════════════
 // ② 경쟁 현황
 // ══════════════════════════════════════════════════
-function renderBaeminStats(r1, r2, cat) {
+function renderBaeminStats(r1, r2, dong, cat) {
+  const areaLabel = dong ? `<span class="dong-badge">동 단위</span>` : '';
+  const areaName = dong ? dong : r2;
   const seed = (r1.length * 3 + r2.length * 7 + cat.length * 11) % 8;
   const M = [0.7, 0.85, 1.0, 1.1, 1.25, 1.4, 1.6, 1.8][seed];
 
@@ -1003,12 +1154,12 @@ function renderBaeminStats(r1, r2, cat) {
       <div class="stat-hint">월 기준 · 입점 후 3개월차</div>
     </div>
     <div class="stat-card">
-      <div class="stat-lbl">${r2} ${cat}<br>배민 활성 가게 수</div>
+      <div class="stat-lbl">${areaName} ${cat}${areaLabel}<br>배민 활성 가게 수</div>
       <div class="stat-val">${stores}<span>개</span></div>
       <div class="stat-hint">배민 기준</div>
     </div>
     <div class="stat-card">
-      <div class="stat-lbl">상권 배민 배달<br>시장 규모 (월)</div>
+      <div class="stat-lbl">${areaName} 배민 배달${areaLabel}<br>시장 규모 (월)</div>
       <div class="stat-val">${mktSize}<span>억원</span></div>
       <div class="stat-hint">배민 기준 추정</div>
     </div>
@@ -1029,7 +1180,7 @@ function renderBaeminStats(r1, r2, cat) {
       <div class="insight-tip">
         <div class="tip-ttl">💡 세일즈 포인트</div>
         <div class="tip-body">
-          ${r2} <strong>${cat}</strong> 상권 배민 배달 시장은 월 <strong>${mktSize}억원</strong> 규모입니다.
+          ${areaName} <strong>${cat}</strong> 상권${areaLabel} 배민 배달 시장은 월 <strong>${mktSize}억원</strong> 규모입니다.
           배민배달 입점 시 커버리지 확대로 평균 <strong>+137% 주문 성장</strong>을 기대할 수 있으며,
           상위 20% 파트너는 월 <strong>${topRev}만원</strong>의 배달 매출을 기록합니다.
         </div>
@@ -1115,7 +1266,9 @@ function renderRankCards(cat) {
 // ══════════════════════════════════════════════════
 // ③ 지금 놓치는 고객
 // ══════════════════════════════════════════════════
-function renderMissedCustomers(r1, r2, cat) {
+function renderMissedCustomers(r1, r2, dong, cat) {
+  const areaName = dong ? dong : r2;
+  const areaLabel = dong ? `<span class="dong-badge">동 단위</span>` : '';
   const seed = (r1.length * 5 + r2.length * 9 + cat.length * 7) % 8;
   const M = [0.75,0.9,1.0,1.15,1.3,1.45,1.65,1.9][seed];
   const radiusMulti = _mapRadius <= 300 ? 0.35 : _mapRadius <= 500 ? 0.6 : 1.0;
@@ -1126,14 +1279,13 @@ function renderMissedCustomers(r1, r2, cat) {
   const potentialCust = Math.round(missedOrders * 1.4);
   const competeStores = Math.round(88 * M);
   const notJoined     = Math.round(248 * M * (1 - 0.32));
-
   const radiusLabel = _mapRadius >= 1000 ? '1km' : _mapRadius + 'm';
 
   document.getElementById('missContent').innerHTML = `
     <div class="miss-hero">
       <div class="miss-hero-num">${missedRevM.toLocaleString()}<span class="miss-hero-unit">만원</span></div>
       <div class="miss-hero-label">이 달 배민 미입점으로 놓치는 추정 매출</div>
-      <div class="miss-hero-sub">${r2} ${cat} 상권 · 반경 ${radiusLabel} 기준 추정치</div>
+      <div class="miss-hero-sub">${areaName} ${cat} 상권${areaLabel} · 반경 ${radiusLabel} 기준 추정치</div>
     </div>
     <div class="miss-grid">
       <div class="miss-card">
@@ -1190,7 +1342,7 @@ function renderMissedCustomers(r1, r2, cat) {
       <div class="insight-tip" style="margin-top:12px;">
         <div class="tip-ttl">💡 영업 포인트</div>
         <div class="tip-body">
-          ${r2} <strong>${cat}</strong> 상권에서 이번 달만 배달 주문이 약 <strong>${monthlyOrders.toLocaleString()}건</strong> 발생하고 있습니다.
+          ${areaName} <strong>${cat}</strong> 상권${areaLabel}에서 이번 달만 배달 주문이 약 <strong>${monthlyOrders.toLocaleString()}건</strong> 발생하고 있습니다.
           파트너님 가게가 배민에 없는 지금 이 순간에도 그 주문들은 인근 경쟁 가게로 가고 있어요.
           매달 <strong>${missedRevM.toLocaleString()}만원</strong>의 추가 매출 기회를 놓치고 계신 겁니다.
         </div>
@@ -1212,11 +1364,15 @@ function renderCaseCards(cat) {
     d.innerHTML = `
       <div class="case-header">
         <div class="case-icon">${cs.icon}</div>
-        <div><div class="case-name">${cs.name}</div><div class="case-meta">${cs.meta}</div></div>
+        <div>
+          <div class="case-name">${cs.name}</div>
+          <div class="case-meta">${cs.meta}</div>
+        </div>
       </div>
       <div class="metrics-row">
-        ${cs.chips.map(m=>`<div class="m-chip"><div class="m-lbl">${m.l}</div><div class="m-val">${m.v}</div></div>`).join('')}
-      </div>`;
+        ${cs.chips.map(c => `<div class="metric-chip"><div class="metric-chip-lbl">${c.l}</div><div class="metric-chip-val">${c.v}</div></div>`).join('')}
+      </div>
+    `;
     container.appendChild(d);
   });
 }
@@ -1224,7 +1380,9 @@ function renderCaseCards(cat) {
 // ══════════════════════════════════════════════════
 // ⑤ 예상 성과
 // ══════════════════════════════════════════════════
-function renderExpectedResults(r1, r2, cat) {
+function renderExpectedResults(r1, r2, dong, cat) {
+  const areaName = dong ? dong : r2;
+  const areaLabel = dong ? `<span class="dong-badge">동 단위</span>` : '';
   const seed = (r1.length * 3 + r2.length * 7 + cat.length * 11) % 8;
   const M = [0.7,0.85,1.0,1.1,1.25,1.4,1.6,1.8][seed];
   const radiusMulti = _mapRadius <= 300 ? 0.35 : _mapRadius <= 500 ? 0.6 : 1.0;
@@ -1240,10 +1398,7 @@ function renderExpectedResults(r1, r2, cat) {
     <div class="expect-hero">
       <div class="expect-hero-label">배민 입점 시 예상 월 추가 매출 (전체 평균)</div>
       <div class="expect-hero-num">${addRevM.toLocaleString()}<span class="expect-hero-unit">만원</span></div>
-      <div class="expect-hero-sub">${r2} ${cat} 상권 기준 · 입점 3개월차 평균</div>
-      <a class="calc-link-btn" href="https://woowahan.lightning.force.com/lightning/popout/utility?0.windowed=true" target="_blank" rel="noopener">
-        🔗 수익계산기로 직접 계산해보기
-      </a>
+      <div class="expect-hero-sub">${areaName} ${cat} 상권${areaLabel} · 입점 3개월차 평균</div>
     </div>
     <div class="stats-grid">
       <div class="stat-card accent">
@@ -1295,6 +1450,81 @@ function renderExpectedResults(r1, r2, cat) {
       </div>
     </div>
   `;
+}
+
+// ══════════════════════════════════════════════════
+// ⑥ 수익 계산기
+// ══════════════════════════════════════════════════
+function renderCalcTab(r1, r2, dong) {
+  const regionLabel = dong ? r2 + ' ' + dong : (r2 || r1);
+  document.getElementById('calcRegion').value = regionLabel;
+  const fee = DELIVERY_FEE_BY_REGION[r1] || 3800;
+  document.getElementById('calcDelivery').value = fee;
+  document.getElementById('calcResult').style.display = 'none';
+}
+
+function toggleCalcOptional() {
+  const el = document.getElementById('calcOptional');
+  const icon = document.getElementById('calcOptToggleIcon');
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  icon.textContent = isOpen ? '▶' : '▼';
+}
+
+function toggleCalcDetail() {
+  const el = document.getElementById('cdBreakdown');
+  const btn = document.getElementById('cdToggleBtn');
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '▼' : '▲';
+}
+
+function runCalc() {
+  const price      = parseFloat(document.getElementById('calcPrice').value) || 0;
+  const orders     = parseFloat(document.getElementById('calcOrders').value) || 0;
+  const commission = parseFloat(document.getElementById('calcCommission').value) || 0;
+  const delivery   = parseFloat(document.getElementById('calcDelivery').value) || 0;
+  const payFee     = parseFloat(document.getElementById('calcPayFee').value) || 0;
+  const foodCost   = parseFloat(document.getElementById('calcFoodCost').value) || 0;
+  const discount   = parseFloat(document.getElementById('calcDiscount').value) || 0;
+
+  if (!price || !orders) { alert('객단가와 일 주문수를 입력해주세요.'); return; }
+
+  const ordersM     = orders * 30;
+  const salesM      = price * ordersM;
+  const commissionM = (price - discount) * (commission / 100) * ordersM;
+  const deliveryM   = delivery * ordersM;
+  const payFeeM     = (price - discount) * (payFee / 100) * ordersM;
+  const vatM        = (commissionM + payFeeM + deliveryM) * 0.1;
+  const discountM   = discount * ordersM;
+  const foodCostM   = salesM * (foodCost / 100);
+  const costM       = commissionM + deliveryM + payFeeM + vatM + discountM + foodCostM;
+  const profitM     = salesM - costM;
+  const profitD     = profitM / 30;
+
+  const fmt  = n => '₩' + Math.round(n).toLocaleString();
+  const fmtW = n => Math.round(n).toLocaleString() + ' 원';
+
+  document.getElementById('calcDailyVal').textContent   = fmt(profitD);
+  document.getElementById('calcMonthlyVal').textContent = fmt(profitM);
+  document.getElementById('cdSales').textContent        = fmtW(salesM);
+  document.getElementById('cdCost').textContent         = fmtW(costM);
+  document.getElementById('cdCommission').textContent   = fmtW(commissionM);
+  document.getElementById('cdDelivery').textContent     = fmtW(deliveryM);
+  document.getElementById('cdPayFee').textContent       = fmtW(payFeeM);
+  document.getElementById('cdVat').textContent          = fmtW(vatM);
+  document.getElementById('cdProfit').textContent       = fmtW(profitM);
+
+  const discRow = document.getElementById('cdDiscountRow');
+  const foodRow = document.getElementById('cdFoodCostRow');
+  discRow.style.display = discount > 0 ? 'flex' : 'none';
+  if (discount > 0) document.getElementById('cdDiscount').textContent = fmtW(discountM);
+  foodRow.style.display = foodCost > 0 ? 'flex' : 'none';
+  if (foodCost > 0) document.getElementById('cdFoodCost').textContent = fmtW(foodCostM);
+
+  document.getElementById('calcResult').style.display = 'block';
+  document.getElementById('cdBreakdown').style.display = 'none';
+  document.getElementById('cdToggleBtn').textContent = '▼';
 }
 
 // ══════════════════════════════════════════════════
